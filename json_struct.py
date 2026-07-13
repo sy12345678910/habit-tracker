@@ -5,11 +5,13 @@ class JSonClass:
     def __init__(self):
         self.id = self.__search_id()
         
-    def build_struct(self, title:str, finish:str):
+    def build_struct(self, title: str, finish: str, is_deleting=False):
         if self.is_datetime(finish) == False:
             return False
         
-        self.id += 1
+        if not is_deleting:
+            self.id += 1
+            
         struct = {
             "id": self.id,
             "title": title,
@@ -19,26 +21,33 @@ class JSonClass:
         
         return struct
 
-    def opeartion(self, struct: dict, is_delete):
+    def operation(self, struct: dict, is_delete: bool):
         try:
             with open('habits.json', 'r') as f:
                 data = json.load(f)
+            
             if not is_delete:
                 data.append(struct)
-            elif is_delete:
+            else:
                 data = [i for i in data if i.get("id") != struct.get("id")]
+                
             with open('habits.json', 'w') as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
         except Exception as e:
             if not is_delete:
                 data = [struct] 
-            elif is_delete:
+            else:
                 data = []
             with open('habits.json', 'w') as f:
                 json.dump(data, f, ensure_ascii=False, indent=4)
             return e
     
-    
+    def read(self):
+        try:
+            with open("habits.json", 'r') as f:
+                return json.load(f)
+        except:
+            return []  
         
     def is_datetime(self, date: str) -> bool:
         try:
@@ -51,6 +60,6 @@ class JSonClass:
         try:
             with open("habits.json", 'r') as f:
                 data = json.load(f)[-1]
-            
             return int(data.get("id"))
-        except: return 0
+        except: 
+            return 0
