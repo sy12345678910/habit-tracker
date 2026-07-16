@@ -2,3 +2,12 @@
 __pycache__/
 settings.json
 habits.json
+habits.sqlite3
+habit.db
+.env
+build/
+core.egg-info/
+leagecy_main.py
+json_struct.py
+venv/
+target/
